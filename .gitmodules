@@ -1,4 +1,4 @@
 [submodule "definitions/mq"]
 	path = definitions/mq
 	url = https://github.com/projecteon/mq-definitions.git
-	branch = master
+	branch = main
