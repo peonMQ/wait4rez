@@ -27,7 +27,7 @@ wait4Rez()
 ```
 
 
-### Supports the following bind commands
+### Commands
 
 * `/wait4rez` sets character in wait4rez mode
 * `/waitforrez` sets character in wait4rez mode
