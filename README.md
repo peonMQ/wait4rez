@@ -6,6 +6,19 @@ When character dies, its set in a waiting for resurrection mode. Once resurrecte
 
 Runs as a state machine inside other macros or can be called from a stand alone script.
 
+Heavily inspired by Knightly's 'Write' lua script'
+
+## Requirements
+
+- MQ
+- MQ2Lua
+
+
+## Installation
+Add `wait4rez.lua` to the `lua` folder of your MQ directory.
+
+## Usage
+
 ```lua
 local wait4Rez = require('wait4rez')
 
@@ -14,7 +27,7 @@ wait4Rez()
 ```
 
 
-## Supports the following bind commands
+### Supports the following bind commands
 
 * `/wait4rez` sets character in wait4rez mode
 * `/waitforrez` sets character in wait4rez mode
