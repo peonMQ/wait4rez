@@ -6,8 +6,6 @@ When character dies, its set in a waiting for resurrection mode. Once resurrecte
 
 Runs as a state machine inside other macros or can be called from a stand alone script.
 
-Heavily inspired by Knightly's 'Write' lua script'
-
 ## Requirements
 
 - MQ
