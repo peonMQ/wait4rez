@@ -1,5 +1,6 @@
 --- @type Mq
 local mq = require('mq')
+local logger = require('utils/logging')
 
 local Wait4RezStates = {
   Idle = "IDLE",
@@ -9,14 +10,8 @@ local Wait4RezStates = {
 
 local state = Wait4RezStates.Idle
 
-local function log (message, ...)
-  local logMessage = string.format(message, ...)
-  print(logMessage)
-end
-
 local function diedEvent()
-	log("%s died, awaiting rezs.", mq.TLO.Me.Name())
-
+	logger.Debug("%s died, awaiting rezs.", mq.TLO.Me.Name())
   mq.cmd("/beep")
   state = Wait4RezStates.Waiting4Rez
 end
@@ -31,7 +26,7 @@ end
 
 local function ensureTarget(targetId)
   if not targetId then
-    log("Invalid <targetId>")
+    logger.Debug("Invalid <targetId>")
     return false
   end
 
@@ -40,7 +35,7 @@ local function ensureTarget(targetId)
       mq.cmdf("/mqtarget id %s", targetId)
       mq.delay("3s", function() return mq.TLO.Target.ID() == targetId end)
     else
-      log("EnsureTarget has no spawncount for target id <%d>", targetId)
+      logger.Debug("EnsureTarget has no spawncount for target id <%d>", targetId)
     end
   end
 
@@ -48,22 +43,20 @@ local function ensureTarget(targetId)
 end
 
 local function waitToZone()
-	log("Waiting to zone.")
-
+	logger.Debug("Waiting to zone.")
   local me = mq.TLO.Me.Name()
   repeat
     mq.delay(100)
   until mq.TLO.Spawn(me.."'s").ID()
 
   mq.delay(500)
-
-  log("Completed zoneing to corpse.")
+  logger.Debug("Completed zoneing to corpse.")
 end
 
 local function doLoot()
   local me = mq.TLO.Me.Name()
   if ensureTarget(mq.TLO.Spawn(me.."'s").ID()) then
-    log("Corpse distance <%s>", mq.TLO.Target.Distance())
+    logger.Debug("Corpse distance <%s>", mq.TLO.Target.Distance())
     if mq.TLO.Target.Distance() < 100 then
       while mq.TLO.Target.Distance() > 15 do
         mq.cmd("/corpse")
@@ -75,13 +68,13 @@ local function doLoot()
       mq.delay("5s", function() return mq.TLO.Corpse.Items() ~= nil end)
       mq.delay(500)
       if not mq.TLO.Window("LootWnd") or not mq.TLO.Corpse.Items then
-        log("Could not open loot window.")
+        logger.Debug("Could not open loot window.")
       else
         mq.cmd("/notify LootWnd LootAllButton leftmouseup")
         mq.delay("30s", function() return not mq.TLO.Window("LootWnd").Open() end)
       end
     else
-      log("Corpse out of range. Could not loot.")
+      logger.Debug("Corpse out of range. Could not loot.")
     end
   end
   state = Wait4RezStates.Idle
@@ -99,7 +92,7 @@ local function doWait4Rez()
   waitToZone()
   doLoot()
   state = Wait4RezStates.Idle
-  log("\ag[SUCCESS]\axRezzed, looted corpse and ready for action.")
+  logger.Debug("\ag[SUCCESS]\ax Ressurected, looted corpse and ready for action.")
 end
 
 
