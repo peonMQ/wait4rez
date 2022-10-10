@@ -1,4 +1,4 @@
-name: Continuous Delivery - FVProject Pathcer
+name: Continuous Delivery - Wait4Rez LUA
 
 on:
   release:
@@ -19,7 +19,9 @@ jobs:
       shell: bash
       run: |
         # Pack files
-        7z a -tzip $BundleFileName *.lua
+        mkdir wait4rez
+        cp *.lua /wait4rez
+        7z a -tzip $BundleFileName wait4rez/*.lua
         7z a -tzip $BundleFileName utils/*.lua
 
     - name: Publish
