@@ -86,7 +86,7 @@ local function doWait4Rez()
 
   repeat
     mq.delay(10)
-  until mq.TLO.Window("ConfirmationDialogBox").Open()
+  until mq.TLO.Window("ConfirmationDialogBox").Open() and mq.TLO.Window("ConfirmationDialogBox").Child("cd_textoutput").Text():find("percent)")
 
   mq.cmd("/nomodkey /notify ConfirmationDialogBox Yes_Button leftmouseup")
   waitToZone()
