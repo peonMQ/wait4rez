@@ -3,6 +3,7 @@
     "files.exclude": {
         "definitions/": true,
         "utils/": true,
+        "broadcast/": true,
     },
     "workbench.colorCustomizations": {
         "editorBracketHighlight.foreground1": "#5caeef",
@@ -20,5 +21,6 @@
     "Lua.workspace.library": [
         "./definitions/mq",
         "./utils/",
+        "./broadcast/",
     ],
 }

@@ -1,6 +1,8 @@
 --- @type Mq
 local mq = require('mq')
 local logger = require('utils/logging')
+local mqutil = require('utils/mq')
+local broadcast = require('broadcast/broadcast')
 
 local Wait4RezStates = {
   Idle = "IDLE",
@@ -11,7 +13,7 @@ local Wait4RezStates = {
 local state = Wait4RezStates.Idle
 
 local function diedEvent()
-	logger.Debug("%s died, awaiting rezs.", mq.TLO.Me.Name())
+	broadcast.Fail("%s died, awaiting rezs.", mq.TLO.Me.Name())
   mq.cmd("/beep")
   state = Wait4RezStates.Waiting4Rez
 end
@@ -22,24 +24,6 @@ mq.event("died", "You died.", diedEvent)
 local function doEvents()
   mq.doevents("slain")
   mq.doevents("died")
-end
-
-local function ensureTarget(targetId)
-  if not targetId then
-    logger.Debug("Invalid <targetId>")
-    return false
-  end
-
-  if mq.TLO.Target.ID() ~= targetId then
-    if mq.TLO.SpawnCount("id "..targetId)() > 0 then
-      mq.cmdf("/mqtarget id %s", targetId)
-      mq.delay("3s", function() return mq.TLO.Target.ID() == targetId end)
-    else
-      logger.Debug("EnsureTarget has no spawncount for target id <%d>", targetId)
-    end
-  end
-
-  return mq.TLO.Target.ID() == targetId
 end
 
 local function waitToZone()
@@ -55,7 +39,7 @@ end
 
 local function doLoot()
   local me = mq.TLO.Me.Name()
-  if ensureTarget(mq.TLO.Spawn(me.."'s").ID()) then
+  if mqutil.EnsureTarget(mq.TLO.Spawn(me.."'s").ID()) then
     logger.Debug("Corpse distance <%s>", mq.TLO.Target.Distance())
     if mq.TLO.Target.Distance() < 100 then
       while mq.TLO.Target.Distance() > 15 do
@@ -75,13 +59,14 @@ local function doLoot()
       end
     else
       logger.Debug("Corpse out of range. Could not loot.")
+      broadcast.Fail("Corpse out of range. Could not loot.")
     end
   end
   state = Wait4RezStates.Idle
 end
 
 local function doWait4Rez()
-  mq.cmd("/bc Ready for rezz.")
+  broadcast.Warn("Ready for rezz.")
   mq.cmd("/consent guild")
 
   repeat
@@ -92,7 +77,7 @@ local function doWait4Rez()
   waitToZone()
   doLoot()
   state = Wait4RezStates.Idle
-  logger.Debug("\ag[SUCCESS]\ax Ressurected, looted corpse and ready for action.")
+  broadcast.Success("Ressurected, looted corpse and ready for action.")
 end
 
 
