@@ -41,7 +41,7 @@ local function doLoot()
   local me = mq.TLO.Me.Name()
   if mqutil.EnsureTarget(mq.TLO.Spawn(me.."'s").ID()) then
     logger.Debug("Corpse distance <%s>", mq.TLO.Target.Distance())
-    if mq.TLO.Target.Distance() < 100 then
+    if mq.TLO.Target.Distance() and mq.TLO.Target.Distance() < 100 then
       while mq.TLO.Target.Distance() > 15 do
         mq.cmd("/corpse")
         mq.delay(20)
