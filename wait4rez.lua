@@ -1,7 +1,7 @@
-local mq = require('mq')
-local logger = require('utils/logging')
-local mqutil = require('utils/mqhelpers')
-local broadcast = require('broadcast/broadcast')
+local mq = require 'mq'
+local logger = require 'utils/logging'
+local mqutil = require 'utils/mqhelpers'
+local broadcast = require 'broadcast/broadcast'
 
 local Wait4RezStates = {
   Idle = "IDLE",

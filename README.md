@@ -18,7 +18,7 @@ Add `wait4rez.lua` to the `lua` folder of your MQ directory.
 ## Usage
 
 ```lua
-local wait4Rez = require('wait4rez')
+local wait4Rez = require 'wait4rez'
 
 -- add following call into your bot loop
 wait4Rez()
