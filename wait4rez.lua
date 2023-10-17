@@ -12,7 +12,7 @@ local Wait4RezStates = {
 local state = Wait4RezStates.Idle
 
 local function diedEvent()
-	broadcast.Fail("%s died, awaiting rezs.", mq.TLO.Me.Name())
+	broadcast.Fail({}, "%s died, awaiting rezs.", mq.TLO.Me.Name())
   mq.cmd("/beep")
   state = Wait4RezStates.Waiting4Rez
 end
@@ -58,14 +58,14 @@ local function doLoot()
       end
     else
       logger.Debug("Corpse out of range. Could not loot.")
-      broadcast.Fail("Corpse out of range. Could not loot.")
+      broadcast.Fail({}, "Corpse out of range. Could not loot.")
     end
   end
   state = Wait4RezStates.Idle
 end
 
 local function doWait4Rez()
-  broadcast.Warn("Ready for rezz.")
+  broadcast.Warn({}, "Ready for rezz.")
   mq.cmd("/consent guild")
 
   repeat
@@ -76,7 +76,7 @@ local function doWait4Rez()
   waitToZone()
   doLoot()
   state = Wait4RezStates.Idle
-  broadcast.Success("Ressurected, looted corpse and ready for action.")
+  broadcast.Success({}, "Ressurected, looted corpse and ready for action.")
 end
 
 
